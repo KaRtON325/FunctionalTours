@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Database\Factories\TourFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -10,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * Class Tour
  * @package App\Models
  *
+ * @property int $id
  * @property int $hotel_id
  * @property string $name
  * @property string $country
@@ -62,5 +65,15 @@ class Tour extends Model
     public function hotel(): HasOne
     {
         return $this->hasOne(Hotel::class);
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return Factory
+     */
+    protected static function newFactory(): Factory
+    {
+        return TourFactory::new();
     }
 }

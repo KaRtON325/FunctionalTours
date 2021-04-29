@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\TourMeals;
+use App\Enums\TourType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,8 +20,8 @@ class CreateToursTable extends Migration
             $table->unsignedBigInteger('hotel_id');
             $table->string('name')->unique();
             $table->string('country');
-            $table->enum('type', ['beach', 'guided', 'active', 'boat', 'nightlife'])->default('guided');
-            $table->enum('meals', ['breakfast', 'lunch', 'dinner', 'all inclusive'])->default('all inclusive');
+            $table->enum('type', ['beach', 'guided', 'active', 'boat', 'nightlife'])->default(TourType::Guided);
+            $table->enum('meals', ['breakfast', 'lunch', 'dinner', 'all inclusive'])->default(TourMeals::AllInclusive);
             $table->date('start_date');
             $table->date('end_date');
             $table->softDeletes();

@@ -4,8 +4,8 @@ namespace Database\Factories;
 
 use App\Enums\TourType;
 use App\Enums\TourMeals;
+use App\Models\Hotel;
 use App\Models\Tour;
-use App\Repositories\HotelRepository;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TourFactory extends Factory
@@ -25,18 +25,16 @@ class TourFactory extends Factory
      */
     public function definition()
     {
-        $hotelRepository = new HotelRepository();
-        $hotelId = array_rand($hotelRepository->allIds());
-        $hotel = $hotelRepository->getById($hotelId);
-
-        return [
-            'hotel_id' => $hotelId,
-            'name' => $this->faker->unique()->title,
-            'country' => $hotel->country,
-            'type' => array_rand(TourType::asArray()),
-            'meals' => array_rand(TourMeals::asArray()),
-            'start_date' => $startDate = $this->faker->dateTime,
-            'end_date' => $startDate->modify(sprintf('+ %d day', random_int(1, 40))),
-        ];
+        return with(Hotel::factory()->create(), function (Hotel $hotel) {
+            return [
+                'hotel_id' => $hotel->id,
+                'name' => $this->faker->unique()->name,
+                'country' => $hotel->country,
+                'type' => TourType::getRandomValue(),
+                'meals' => TourMeals::getRandomValue(),
+                'start_date' => $startDate = $this->faker->dateTime,
+                'end_date' => $startDate->modify(sprintf('+ %d day', random_int(1, 40))),
+            ];
+        });
     }
 }

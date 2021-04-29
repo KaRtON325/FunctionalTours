@@ -23,8 +23,8 @@ class HotelFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->unique()->firstNameFemale,
-            'starts' => random_int(1, 5),
+            'name' => $this->faker->firstNameFemale,
+            'stars' => random_int(1, 5),
             'country' => $this->faker->country,
             'city' => $this->faker->city,
             'address' => $this->faker->address,

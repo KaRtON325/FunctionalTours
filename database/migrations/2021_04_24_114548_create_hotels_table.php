@@ -17,7 +17,7 @@ class CreateHotelsTable extends Migration
             $table->id();
             $table->string('name');
             $table->tinyInteger('stars', false, true);
-            $table->integer('country');
+            $table->string('country');
             $table->string('city');
             $table->string('address');
             $table->softDeletes();

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 use function Functional\map;
 use function Functional\select;
 
-class HotelRepository implements HotelRepositoryInterface
+class TourRepository implements HotelRepositoryInterface
 {
     /**
      * @return Hotel[]|Collection
@@ -20,11 +20,11 @@ class HotelRepository implements HotelRepositoryInterface
 
     public function allIds(): array
     {
-        return map($this->all(), fn ($hotel) => $hotel->id);
+        return map($this->all(), fn ($tour) => $tour->id);
     }
 
     public function getById(int $id): Hotel
     {
-        return head(select($this->all(), fn ($hotel) => $hotel->id === $id));
+        return head(select($this->all(), fn ($tour) => $tour->id === $id));
     }
 }
