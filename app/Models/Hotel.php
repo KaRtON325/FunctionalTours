@@ -2,30 +2,30 @@
 
 namespace App\Models;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Lumen\Auth\Authorizable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Tour extends Model
+/**
+ * Class Hotel
+ * @package App\Models
+ *
+ * @property string $name
+ * @property int $starts
+ * @property string $country
+ * @property string $city
+ * @property string $address
+ */
+class Hotel extends Model
 {
+    use HasFactory;
+
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'tours';
-
-    /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = [
-        'hotel'
-    ];
+    protected $table = 'hotels';
 
     /**
      * The attributes that are mass assignable.
@@ -33,7 +33,7 @@ class Tour extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'country', 'hotel', 'type', 'meals', 'start_date', 'end_date',
+        'name', 'stars', 'country', 'city', 'address',
     ];
 
     /**
@@ -48,8 +48,8 @@ class Tour extends Model
     /**
      * Get the hotel in the tour.
      */
-    public function hotel()
+    public function tours(): HasMany
     {
-        return $this->belongsTo(Hotel::class);
+        return $this->hasMany(Tour::class);
     }
 }

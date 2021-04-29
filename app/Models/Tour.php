@@ -2,22 +2,49 @@
 
 namespace App\Models;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Lumen\Auth\Authorizable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class User extends Model
+/**
+ * Class Tour
+ * @package App\Models
+ *
+ * @property int $hotel_id
+ * @property string $name
+ * @property string $country
+ * @property string $type
+ * @property string $meals
+ * @property string $start_date
+ * @property string $end_date
+ */
+class Tour extends Model
 {
+    use HasFactory;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'tours';
+
+    /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = [
+        'hotel'
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email',
+        'hotel_id', 'name', 'country', 'type', 'meals', 'start_date', 'end_date',
     ];
 
     /**
@@ -26,6 +53,14 @@ class User extends Model
      * @var array
      */
     protected $hidden = [
-        'password',
+
     ];
+
+    /**
+     * Get the hotel in the tour.
+     */
+    public function hotel(): HasOne
+    {
+        return $this->hasOne(Hotel::class);
+    }
 }
