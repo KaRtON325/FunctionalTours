@@ -32,8 +32,11 @@ RUN rm -rf /var/cache/apk/* && docker-php-source delete
 RUN curl -sS https://getcomposer.org/installer | php -- \
     --install-dir=/usr/bin --filename=composer && chmod +x /usr/bin/composer
 
-RUN wget https://phar.phpunit.de/phpunit-6.0.phar && \
+RUN wget phar.phpunit.de/phpunit-6.0.phar && \
         chmod +x phpunit-6.0.phar && \
         mv phpunit-6.0.phar /usr/local/bin/phpunit
+
+ADD . /application
+RUN chown -R www-data:www-data /application
 
 WORKDIR "/application/filp.loc"

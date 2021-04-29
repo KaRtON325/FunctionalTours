@@ -23,7 +23,7 @@ class TourFactory extends Factory
      * @return array
      * @throws \Exception
      */
-    public function definition()
+    public function definition(): array
     {
         return with(Hotel::factory()->create(), function (Hotel $hotel) {
             return [
