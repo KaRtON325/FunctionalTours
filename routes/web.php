@@ -13,4 +13,11 @@
 |
 */
 
-$router->get('/', 'TourController@getByCountry');
+$router->get('/', function () use ($router) {
+    return $router->app->version();
+});
+
+$router->get('tour/getByCountry/{country}', 'TourController@getByCountry');
+$router->get('tour/getByType/{type}', 'TourController@getByType');
+$router->get('tour/getByMeals/{meals}', 'TourController@getByMeals');
+$router->get('tour/find/{type}[/{start_date}[/{end_date}]]', 'TourController@find');

@@ -6,7 +6,7 @@ use Database\Factories\HotelFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class Hotel
@@ -51,9 +51,9 @@ class Hotel extends Model
     /**
      * Get the hotel in the tour.
      */
-    public function tours(): HasMany
+    public function tours(): BelongsTo
     {
-        return $this->hasMany(Tour::class);
+        return $this->belongsTo(Tour::class);
     }
 
     /**

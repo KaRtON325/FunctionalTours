@@ -3,19 +3,20 @@
 namespace App\Repositories;
 
 use App\Models\Hotel;
-use App\Repositories\Interfaces\HotelRepositoryInterface;
+use App\Models\Tour;
+use App\Repositories\Interfaces\TourRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use function Functional\map;
 use function Functional\select;
 
-class TourRepository implements HotelRepositoryInterface
+class TourRepository implements TourRepositoryInterface
 {
     /**
      * @return Hotel[]|Collection
      */
     public function all(): array|Collection
     {
-        return Hotel::all();
+        return Tour::all();
     }
 
     public function allIds(): array
@@ -23,7 +24,7 @@ class TourRepository implements HotelRepositoryInterface
         return map($this->all(), fn ($tour) => $tour->id);
     }
 
-    public function getById(int $id): Hotel
+    public function getById(int $id): Tour
     {
         return head(select($this->all(), fn ($tour) => $tour->id === $id));
     }
