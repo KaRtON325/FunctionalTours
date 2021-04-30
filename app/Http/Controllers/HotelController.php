@@ -20,7 +20,7 @@ class HotelController extends BaseController
 
     public function getByCountry(string $country): array
     {
-        return $this->responseSuccess(select($this->hotelRepository->all(), fn(Tour $tour) => $tour->country == $country));
+        return $this->responseSuccess(select($this->hotelRepository->all(), fn(Hotel $hotel) => $hotel->country == $country));
     }
 
     public function create(string $name, int $stars, string $country, string $city, string $address): array

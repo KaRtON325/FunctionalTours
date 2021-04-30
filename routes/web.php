@@ -24,4 +24,5 @@ $router->get('tour/getByHotel/{hotel}', 'TourController@getByHotel');
 $router->get('tour/find/{type}[/{start_date}[/{end_date}]]', 'TourController@find');
 $router->get('tour/create/{hotel_id}/{name}/{country}/{type}/{meals}/{start_date}/{end_date}', 'TourController@create');
 
+$router->get('hotel/getByCountry/{country}/', 'HotelController@getByCountry');
 $router->get('hotel/create/{name}/{stars}/{country}/{city}/{address}/', 'HotelController@create');
