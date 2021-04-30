@@ -23,6 +23,13 @@ class Hotel extends Model
 {
     use HasFactory;
 
+    const MIN_NAME_LENGTH = 3;
+    const MIN_STARS = 1;
+    const MAX_STARS = 5;
+    const MIN_COUNTRY_LENGTH = 3;
+    const MIN_CITY_LENGTH = 2;
+    const MIN_ADDRESS_LENGTH = 5;
+
     /**
      * The table associated with the model.
      *

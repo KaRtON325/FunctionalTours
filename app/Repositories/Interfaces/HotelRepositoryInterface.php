@@ -12,4 +12,6 @@ interface HotelRepositoryInterface
     public function allIds(): array;
 
     public function getById(int $id): Hotel;
+
+    public function create(array $attributes): Hotel;
 }

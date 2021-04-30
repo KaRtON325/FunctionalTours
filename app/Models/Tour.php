@@ -20,10 +20,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $meals
  * @property string $start_date
  * @property string $end_date
+ *
+ * @property Hotel $hotel
  */
 class Tour extends Model
 {
     use HasFactory;
+
+    const MIN_NAME_LENGTH = 3;
+    const MIN_COUNTRY_LENGTH = 3;
 
     /**
      * The table associated with the model.

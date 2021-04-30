@@ -6,9 +6,8 @@ use App\Enums\TourMeals;
 use App\Enums\TourType;
 use App\Models\Tour;
 use App\Repositories\TourRepository;
-use Laravel\Lumen\Routing\Controller as BaseController;
+use Illuminate\Database\QueryException;
 use function Functional\contains;
-use function Functional\not;
 use function Functional\select;
 use function Functional\some;
 use function Functional\true;
@@ -24,27 +23,32 @@ class TourController extends BaseController
 
     public function getByCountry(string $country): array
     {
-        return $this->showResult(select($this->tourRepository->all(), fn(Tour $tour) => $tour->country == $country));
+        return $this->responseSuccess(select($this->tourRepository->all(), fn(Tour $tour) => $tour->country == $country));
     }
 
     public function getByType(string $type): array
     {
         return contains(TourType::getValues(), $type)
-            ? $this->showResult(select($this->tourRepository->all(), fn(Tour $tour) => $tour->type == $type))
-            : ['status' => false, 'error_message' => 'There is no such type available'];
+            ? $this->responseSuccess(select($this->tourRepository->all(), fn(Tour $tour) => $tour->type == $type))
+            : $this->responseFail('There is no such type available');
     }
 
     public function getByMeals(string $meals): array
     {
         return contains(TourMeals::getValues(), $meals)
-            ? $this->showResult(select($this->tourRepository->all(), fn(Tour $tour) => $tour->meals == $meals))
-            : ['status' => false, 'error_message' => 'There is no such meals available'];
+            ? $this->responseSuccess(select($this->tourRepository->all(), fn(Tour $tour) => $tour->meals == $meals))
+            : $this->responseFail('There is no such meals available');
+    }
+
+    public function getByHotel(string $hotel): array
+    {
+        return $this->responseSuccess(select($this->tourRepository->all(), fn(Tour $tour) => $tour->hotel->name == $hotel));
     }
 
     public function find(string $type, string $start_date = '', string $end_date = ''): array
     {
         return contains(TourType::getValues(), $type)
-            ? $this->showResult(
+            ? $this->responseSuccess(
                 select(
                     $this->tourRepository->all(),
                     fn(Tour $tour) => true([
@@ -54,11 +58,38 @@ class TourController extends BaseController
                     ])
                 )
             )
-            : ['status' => false, 'error_message' => 'There is no such meals available'];
+            : $this->responseFail('There is no such meals available');
     }
 
-    private function showResult(mixed $result): array
+    public function create(int $hotel_id, string $name, string $country, string $type, string $meals, string $start_date, string $end_date): array
     {
-        return ['status' => true, 'data' => array_values($result)];
+        try {
+            return true([
+                $hotel_id > 0,
+                strlen(urldecode($name)) > Tour::MIN_NAME_LENGTH,
+                strlen(urldecode($country)) > Tour::MIN_COUNTRY_LENGTH,
+                contains(TourType::getValues(), $type),
+                contains(TourMeals::getValues(), $meals),
+                strtotime(urldecode($start_date)) > 0,
+                strtotime(urldecode($end_date)) > 0,
+            ])
+                ? with($this->tourRepository->create([
+                    'hotel_id' => $hotel_id,
+                    'name' => urldecode($name),
+                    'country' => urldecode($country),
+                    'type' => urldecode($type),
+                    'meals' => urldecode($meals),
+                    'start_date' => urldecode($start_date),
+                    'end_date' => urldecode($end_date),
+                ]), fn(Tour $tour) => empty($tour->id)
+                    ? $this->responseFail(
+                        'Internal error: could not save', static::HTTP_INTERNAL_ERROR
+                    )
+                    : $this->responseSuccess([$tour])
+                )
+                : $this->responseFail('There is an error in your request parameters');
+        } catch (QueryException $e) {
+            return $this->responseFail($e->getMessage(), static::HTTP_INTERNAL_ERROR);
+        }
     }
 }
