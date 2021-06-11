@@ -23,7 +23,7 @@ class TourController extends BaseController
 
     public function getByCountry(string $country): array
     {
-        return $this->responseSuccess(select($this->tourRepository->all(), fn(Tour $tour) => $tour->country == $country));
+        return $this->responseSuccess(select($this->tourRepository->all(), fn(Tour $tour) => $tour->hotel->country == $country));
     }
 
     public function getByType(string $type): array
@@ -61,24 +61,24 @@ class TourController extends BaseController
             : $this->responseFail('There is no such meals available');
     }
 
-    public function create(int $hotel_id, string $name, string $country, string $type, string $meals, string $start_date, string $end_date): array
+    public function create(int $hotel_id, string $name, string $type, string $meals, float $price, string $start_date, string $end_date): array
     {
         try {
             return true([
                 $hotel_id > 0,
                 strlen(urldecode($name)) > Tour::MIN_NAME_LENGTH,
-                strlen(urldecode($country)) > Tour::MIN_COUNTRY_LENGTH,
                 contains(TourType::getValues(), $type),
                 contains(TourMeals::getValues(), $meals),
+                $price > 0,
                 strtotime(urldecode($start_date)) > 0,
                 strtotime(urldecode($end_date)) > 0,
             ])
                 ? with($this->tourRepository->create([
                     'hotel_id' => $hotel_id,
                     'name' => urldecode($name),
-                    'country' => urldecode($country),
                     'type' => urldecode($type),
                     'meals' => urldecode($meals),
+                    'price' => $price,
                     'start_date' => urldecode($start_date),
                     'end_date' => urldecode($end_date),
                 ]), fn(Tour $tour) => empty($tour->id)

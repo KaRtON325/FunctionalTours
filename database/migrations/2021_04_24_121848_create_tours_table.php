@@ -19,9 +19,9 @@ class CreateToursTable extends Migration
             $table->id();
             $table->unsignedBigInteger('hotel_id');
             $table->string('name')->unique();
-            $table->string('country');
             $table->enum('type', ['beach', 'guided', 'active', 'boat', 'nightlife'])->default(TourType::Guided);
             $table->enum('meals', ['breakfast', 'lunch', 'dinner', 'all inclusive'])->default(TourMeals::AllInclusive);
+            $table->unsignedFloat('price', 13, 2);
             $table->date('start_date');
             $table->date('end_date');
             $table->softDeletes();

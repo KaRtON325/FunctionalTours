@@ -22,18 +22,18 @@ class TourRepository implements TourRepositoryInterface
 
     public function allIds(): array
     {
-        return map($this->all(), fn ($tour) => $tour->id);
+        return map($this->all(), fn($tour) => $tour->id);
     }
 
     public function getById(int $id): Tour
     {
-        return head(select($this->all(), fn ($tour) => $tour->id === $id));
+        return head(select($this->all(), fn($tour) => $tour->id === $id));
     }
 
     public function create(array $attributes): Tour
     {
         return with(new Tour(), function(Tour $tour) use ($attributes) {
-            return tap($tour, fn () => $tour->setRawAttributes($attributes)->save());
+            return tap($tour, fn() => $tour->setRawAttributes($attributes)->save());
         });
     }
 }

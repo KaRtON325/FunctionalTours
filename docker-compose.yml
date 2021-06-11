@@ -57,9 +57,9 @@ services:
     links:
       - mysql:db
     volumes:
-      - ./docker/mysql-data/cfg/pma.php:/etc/phpmyadmin/config.user.inc.php
+      - ./docker/mysql-data/cfg/pma:/etc/phpmyadmin
     ports:
-      - ${PMA_PORT}:80
+      - ${PMA_PORT}
     environment:
       MYSQL_ROOT_PASSWORD: root
     depends_on:

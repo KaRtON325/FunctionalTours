@@ -13,7 +13,11 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\AdminCommand::class,
+        Commands\HotelCreateCommand::class,
+        Commands\HotelFindCommand::class,
+        Commands\TourCreateCommand::class,
+        Commands\TourFindCommand::class,
     ];
 
     /**

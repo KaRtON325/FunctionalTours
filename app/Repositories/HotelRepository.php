@@ -22,18 +22,18 @@ class HotelRepository implements HotelRepositoryInterface
 
     public function allIds(): array
     {
-        return map($this->all(), fn ($hotel) => $hotel->id);
+        return map($this->all(), fn($hotel) => $hotel->id);
     }
 
     public function getById(int $id): Hotel
     {
-        return head(select($this->all(), fn ($hotel) => $hotel->id === $id));
+        return head(select($this->all(), fn($hotel) => $hotel->id === $id));
     }
 
     public function create(array $attributes): Hotel
     {
         return with(new Hotel(), function(Hotel $hotel) use ($attributes) {
-            return tap($hotel, fn () => $hotel->setRawAttributes($attributes)->save());
+            return tap($hotel, fn() => $hotel->setRawAttributes($attributes)->save());
         });
     }
 }

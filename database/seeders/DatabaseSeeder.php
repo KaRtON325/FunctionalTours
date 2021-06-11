@@ -14,6 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        return Tour::factory(20)->create();
+        return Tour::factory(25)->create();
     }
 }

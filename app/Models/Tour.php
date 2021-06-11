@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property int $hotel_id
  * @property string $name
- * @property string $country
  * @property string $type
  * @property string $meals
  * @property string $start_date
@@ -28,7 +27,6 @@ class Tour extends Model
     use HasFactory;
 
     const MIN_NAME_LENGTH = 3;
-    const MIN_COUNTRY_LENGTH = 3;
 
     /**
      * The table associated with the model.
@@ -52,8 +50,30 @@ class Tour extends Model
      * @var array
      */
     protected $fillable = [
-        'hotel_id', 'name', 'country', 'type', 'meals', 'start_date', 'end_date',
+        'hotel_id', 'name', 'type', 'meals', 'price', 'start_date', 'end_date', 'country'
     ];
+
+    protected $attributes = ['country'];
+
+    protected $appends = ['country'];
+
+    /**
+     * @return string
+     */
+    public function getCountryAttribute(): string
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param  string  $country
+     * @return Tour
+     */
+    public function setCountry(string $country)
+    {
+        $this->country = $country;
+        return $this;
+    }
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -63,6 +83,8 @@ class Tour extends Model
     protected $hidden = [
 
     ];
+
+    public string $country = '';
 
     /**
      * Get the hotel in the tour.

@@ -12,11 +12,11 @@ class BaseController extends Controller
 
     protected function responseSuccess(mixed $result): array
     {
-        return with(http_response_code(static::HTTP_OK), fn () => ['status' => true, 'data' => array_values($result)]);
+        return with(http_response_code(static::HTTP_OK), fn() => ['status' => true, 'data' => array_values($result)]);
     }
 
     protected function responseFail(string $error_message, int $response_code = self::HTTP_BAD_REQUEST): array
     {
-        return with(http_response_code($response_code), fn () => ['status' => false, 'error_message' => $error_message]);
+        return with(http_response_code($response_code), fn() => ['status' => false, 'error_message' => $error_message]);
     }
 }

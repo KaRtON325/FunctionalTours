@@ -29,11 +29,11 @@ class TourFactory extends Factory
             return [
                 'hotel_id' => $hotel->id,
                 'name' => $this->faker->unique()->name,
-                'country' => $hotel->country,
                 'type' => TourType::getRandomValue(),
                 'meals' => TourMeals::getRandomValue(),
                 'start_date' => $startDate = $this->faker->dateTime,
                 'end_date' => $startDate->modify(sprintf('+ %d day', random_int(1, 40))),
+                'price' => rand(1, 10) / 10 * random_int(100000, 9000000),
             ];
         });
     }
