@@ -27,7 +27,7 @@ class HotelFindCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'hotel:find {--name= : Needed hotel\'s name} {--stars= : Needed hotel\'s stars} {--country= : Needed hotel\'s country} {--city= : Needed hotel\'s city}';
+    protected $signature = 'hotel:find {--name= : Needed hotel\'s name} {--stars= : Needed hotel\'s stars} {--country= : Needed hotel\'s country} {--city= : Needed hotel\'s city} {--none : Force all hotels list}';
 
     /**
      * The console command description.
@@ -45,20 +45,22 @@ class HotelFindCommand extends Command
     public function handle()
     {
         try {
-            $this->option('none') !== none(HotelFindParameters::getKeys(), fn($option) => $this->option(strtolower($option)))
+            $this->option('none') !== TRUE && none(HotelFindParameters::getKeys(), fn($option) => $this->option(strtolower($option)))
                 ? with(
-                $this->choice('Which parameter do you choose?', HotelFindParameters::asSelectArray()),
-                fn($choice) => with(
-                    $this->ask('What value is?'),
-                    fn($value) => $this->call('hotel:find', [concat('--', strtolower($choice)) => $value])
+                    $this->choice('Which parameter do you choose?', HotelFindParameters::asSelectArray()),
+                    fn($choice) => $choice !== HotelFindParameters::getDescription(HotelFindParameters::None)
+                        ? with(
+                            $this->ask('What value is?'),
+                            fn($value) => $this->call('tour:find', [concat('--', strtolower($choice)) => $value])
+                        )
+                        : $this->call('hotel:find', ['--none' => true])
                 )
-            )
                 : with(
                 (new Collection(select(Hotel::all(), fn(Hotel $hotel) => true([
                     some([empty($this->option('name')), $hotel->name === $this->option('name')]),
-                    some([empty($this->option('stars')), $hotel->stars === $this->option('type')]),
-                    some([empty($this->option('country')), $hotel->meals === $this->option('meals')]),
-                    some([empty($this->option('city')), $hotel->hotel->name === $this->option('hotel')]),
+                    some([empty($this->option('stars')), $hotel->stars === $this->option('stars')]),
+                    some([empty($this->option('country')), $hotel->country === $this->option('country')]),
+                    some([empty($this->option('city')), $hotel->city === $this->option('city')]),
                 ]))))->whenEmpty(function() { $this->info('There is no hotels found.'); exit; }),
                 fn(Collection $hotels) => tap(
                     $this->table(

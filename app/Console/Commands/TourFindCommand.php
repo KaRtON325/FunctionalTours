@@ -28,7 +28,7 @@ class TourFindCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'tour:find {--country= : Needed tour\'s country} {--type= : Needed tour\'s type} {--meals= : Needed tour\'s meals} {--hotel= : Needed tour\'s hotel name} {--none : Force all tour list}';
+    protected $signature = 'tour:find {--country= : Needed tour\'s country} {--type= : Needed tour\'s type} {--meals= : Needed tour\'s meals} {--hotel= : Needed tour\'s hotel name} {--none : Force all tours list}';
 
     /**
      * The console command description.
@@ -46,7 +46,7 @@ class TourFindCommand extends Command
     public function handle()
     {
         try {
-            $this->option('none') !== NULL && none(TourFindParameters::getKeys(), fn($option) => $this->option(strtolower($option)))
+            $this->option('none') !== TRUE && none(TourFindParameters::getKeys(), fn($option) => $this->option(strtolower($option)))
                 ? with(
                     $this->choice('Which parameter do you choose?', TourFindParameters::asSelectArray()),
                     fn($choice) => $choice !== TourFindParameters::getDescription(TourFindParameters::None)
